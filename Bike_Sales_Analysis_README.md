@@ -99,11 +99,11 @@ This project focuses on a full-cycle data analysis process, involving:
 ### 🥧 Proportional Analysis  
 - Found which product categories contribute most to total revenue  
 
-## 📦 Product-Level Analysis – report_product.sql  
+### 📦 Product-Level Analysis – report_product.sql  
 
 Generates a **product-level summary view** with key metrics.  
 
-### 🔍 Metrics Calculated:  
+#### 🔍 Metrics Calculated:  
 - Product ID, Name, Category, Subcategory  
 - Average Cost  
 - Total Sales  
@@ -115,15 +115,15 @@ Generates a **product-level summary view** with key metrics.
 - Recency (Months)  
 - **Product Segment:** High-Performer, Mid-Performer, Low-Performer  
 
-### 🎯 Purpose:  
+#### 🎯 Purpose:  
 - Identify top-performing and underperforming products  
 - Analyze product trends  
 
-## 👥 Customer-Level Analysis – report_customer.sql  
+### 👥 Customer-Level Analysis – report_customer.sql  
 
 Generates a **customer summary view** capturing lifetime metrics.  
 
-### 🔍 Metrics Calculated:  
+#### 🔍 Metrics Calculated:  
 - Customer ID, Name, Age, Age Group, Gender, Country  
 - Total Sales  
 - Total Orders  
@@ -134,12 +134,12 @@ Generates a **customer summary view** capturing lifetime metrics.
 - Recency (Months)  
 - **Status (Segment):** VIP, Regular, New  
 
-### 🎯 Purpose:  
+#### 🎯 Purpose:  
 - Segment customers based on loyalty and value  
 - Understand customer behavior  
 - Enable targeted marketing  
 
-## 🏆 Value Added by SQL Views  
+### 🏆 Value Added by SQL Views  
 - Simplify Power BI modeling  
 - Enable faster report performance  
 - Power deep product- and customer-specific insights  
@@ -165,7 +165,60 @@ Generates a **customer summary view** capturing lifetime metrics.
   - Revenue Forecast (2 Years Ahead)  
   - 3-Month Moving Avg (Line Chart)  
 - Slicers: Year, Country, Category  
-- Page Navigation Enabled  
+- Page Navigation Enabled
+
+DAX:
+
+    Total Sales = SUM(fact_sales[sales_amount])
+
+    Total Orders = DISTINCTCOUNT(order_number)
+
+YoY Growth using:
+
+    Latest Year = MAX('Date Table'[Year])
+    Latest Year Revenue = CALCULATE( [Total Revenue], 'Date Table'[Year] = MAX('Date Table'[Year]))
+    Previous Year Revenue = 
+    CALCULATE(
+        [Total Revenue],
+        'Date Table'[Year] = MAX('Date Table'[Year]) - 1
+    )
+
+    YoY Growth % = 
+    DIVIDE([Latest Year Revenue] - [Previous Year Revenue], [Previous Year Revenue])
+
+Monthly growth using: - 
+    
+    Previous Month Revenue = 
+    CALCULATE(
+        [Total Revenue],
+        PREVIOUSMONTH('Date Table'[Date]))
+
+    MoM Growth % = 
+    IF(NOT ISBLANK([Previous Month Revenue]), DIVIDE([Total Revenue] - [Previous Month Revenue], [Previous Month Revenue], BLANK()))
+
+For Cumulative revenue graph -
+    
+    Running Total Revenue = 
+    CALCULATE(
+    [Total Revenue],
+    FILTER(
+        ALLSELECTED('Date Table'[Date]),
+        'Date Table'[Date] <= MAX('Date Table'[Date])
+        )
+    )
+    
+
+For 3- month moving avg -
+
+    3-Month Moving Avg = 
+    AVERAGEX(
+    DATESINPERIOD(
+        'Date Table'[Date],
+        MAX('Date Table'[Date]),
+        -3,
+        MONTH
+        ), [Total Revenue]
+    )
 
 ### 🚴‍♂️ Page 2: Product Insights  
 
@@ -187,8 +240,8 @@ Generates a **customer summary view** capturing lifetime metrics.
 - Donut Charts:  
   - Customer Segments (VIP, Regular, New)  
   - Revenue by Customer Segment  
-- Revenue by Age Group (Bar Chart)  
-- Revenue by Gender (Bar Chart)  
+  - Revenue by Age Group (Bar Chart)  
+  - Revenue by Gender (Bar Chart)  
 - Customer Count by Country (Bar Chart)  
 - Customer KPI Table (report_customer view)  
 
@@ -203,13 +256,23 @@ Generates a **customer summary view** capturing lifetime metrics.
 - Several products underperform and may need promotions or removal.  
 
 ### 🏆 Solutions:  
-- Focus on retaining VIP and Regular customers.  
+- Retention Focus: Prioritize engagement for VIPs and Regular customers.
 - Increase inventory for high-performing products.  
-- Target high-revenue countries during peak months.  
-- Target **female customers** (nearly 50% of revenue); design products like bikes with compartments for essentials.  
-- Capture younger customers for long-term growth.  
+- Marketing Strategy: Target countries with high sales potential; promote during peak months.  
+- New Customer Acquisition: Target **female customers** (nearly 50% of revenue); design products like bikes with compartments for essentials.  
+  - Capture younger customers for long-term growth.  
 - Collaborate with **touring groups** to rent tour bikes, which currently underperform.  
 
 ## 📜 Appendix:  
 - SQL Files: `Compiled Analysis.sql`, `Product Report.sql`, `Report_Customer.sql`  
-- Power BI File: `Bike_Sales_Analysis.pbix`  
+- Power BI File: `Bike_Sales_Analysis.pbix`
+
+# Snapshot of the Dashboard
+## Sales Performance
+![Image](https://github.com/user-attachments/assets/121accb7-bfe6-4245-ada9-5244dee56847)
+
+## Product Insights
+![Image](https://github.com/user-attachments/assets/6673f2d0-e65d-4f80-afae-785f02562204)
+
+## Customer Insights
+![Image](https://github.com/user-attachments/assets/55cdc040-9f58-4298-8af3-8a65171acf2f)
