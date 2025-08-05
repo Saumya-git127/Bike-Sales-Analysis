@@ -272,7 +272,7 @@ For 3- month moving avg -
 ![Image](https://github.com/user-attachments/assets/121accb7-bfe6-4245-ada9-5244dee56847)
 
 ## Product Insights
-![Image](https://github.com/user-attachments/assets/6673f2d0-e65d-4f80-afae-785f02562204)
+<img width="1467" height="825" alt="image" src="https://github.com/user-attachments/assets/c998e44d-6702-4141-b5e6-e0c870a63469" />
 
 ## Customer Insights
 ![Image](https://github.com/user-attachments/assets/55cdc040-9f58-4298-8af3-8a65171acf2f)
